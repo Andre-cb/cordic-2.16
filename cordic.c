@@ -14,7 +14,6 @@ int* generate_lookup_table(int count) {
 	for (int i = 0; i < count; i++) {
 		double angle = atan(1.0 / (2 << i)) * FIXED_POINT;
 		table[i] = round(angle);
-		//printf("%f\n",round(atan(1.0 / (2 << i + 1))) * FIXED_POINT ); 
 	}
 	
 	return table;
@@ -47,12 +46,10 @@ void cordic(int iterations, int* lookup, int* cordic_cos, int* cordic_sin, int t
 		    new_x = x + (y >> shift);
 		    new_y = y - (x >> shift);
 		    angle -= lookup[i];
-		    //printf("angle: %d x: %d, y: %d shift: %d over\n", angle, new_x, new_y, shift);
 		} else {
 		    new_x = x - (y >> shift);
 		    new_y = y + (x >> shift);
 		    angle += lookup[i];
-		    //printf("angle: %d x: %d, y: %d under\n", angle, new_x, new_y);
 		}
 
 		x = new_x;
@@ -66,10 +63,6 @@ void cordic(int iterations, int* lookup, int* cordic_cos, int* cordic_sin, int t
 int main() {
 	const int iterations = 5; // after 5 start getting overflow because of shifting
 	int* lookup_table = generate_lookup_table(iterations);
-
-//	for (int i = 0; i < iterations; i++){
-//		printf("index: %d, value: %d\n", i, lookup_table[i]);	
-//	}
 
 	double max_input = round(PI/2 * FIXED_POINT);
 	double min_input = -PI/2 * FIXED_POINT;
@@ -94,7 +87,7 @@ int main() {
 		printf("input angle: %d, cordic sine 2.16: %d, cordic cosine 2.16: %d, cordic sin radians: %f, cordic cosine radians: %f default sine: %f, default cosine: %f\n", (int)round(i), cordic_sine, cordic_cosine, cordic_sine/(double)(FIXED_POINT), cordic_cosine/(double)(FIXED_POINT), default_sine, default_cosine);
 
 	}
-	printf("\nMean Absolute Errors\nsine error: %f, cosine error: %f\n", error_sine/ (double)number_of_iterations, error_cosine/ (double) number_of_iterations);
+	printf("\nMean Absolute Errors\nsine error: %f radians, cosine error: %f\n radians", error_sine/ (double)number_of_iterations, error_cosine/ (double) number_of_iterations);
 	printf("\n----------------------------\nEnd\n");	
 
 	free(lookup_table);
