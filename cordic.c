@@ -1,7 +1,7 @@
 /* CE4518 - COMPUTER ARCHITECTURE 
  * Assignment Title: Cordic 2.16
  *
- * The Purpose of this this assignment is to implement a cordic algorith in 2.16 
+ * The Purpose of this assignment is to implement a cordic algorith in 2.16 
  * fixed point. The algorithim is implement in the cordic() function and only uses
  * shifting and adding and subtraction. This complies with the assumption of the system
  * not having a multiplier.
@@ -101,17 +101,17 @@ void cordic(int iterations, int* lookup, int* cordic_cos, int* cordic_sin, int t
 		angle = -angle;
 	}
 
-	for (int i = 0; i < iterations; i++) {
+	for (int i = 1; i <= iterations; i++) {
 		int new_x, new_y; // used for temporary storage
 
 		if (theta < angle) { // For overshoot
-		    new_x = x + (y >> i + 1); // derived from notes
-		    new_y = y - (x >> i + 1);
-		    angle -= lookup[i]; // subtract ith angle in lookup table from var angle
+		    new_x = x + (y >> i); // derived from notes
+		    new_y = y - (x >> i);
+		    angle -= lookup[i-1]; // subtract ith angle in lookup table from var angle
 		} else {                      // Under Shoot
-		    new_x = x - (y >> i + 1); // Also derived from notes.
-		    new_y = y + (x >> i + 1);
-		    angle += lookup[i];       // add ith angle in lookup table from var angle
+		    new_x = x - (y >> i); // Also derived from notes.
+		    new_y = y + (x >> i);
+		    angle += lookup[i-1];       // add ith angle in lookup table from var angle
 		}
 		// set new xin and yin for next iterations	
 		x = new_x; 
